@@ -18,3 +18,4 @@ Each folder in [`projects/`](projects) is a self-contained project with its own 
 | # | Date | Project | Format |
 | --- | --- | --- | --- |
 | 001 | 2026-10-31 | [Haunted Focus Timer](projects/001-haunted-focus-timer) | 📱 Mini-app |
+| 002 | 2026-11-01 | [Accessible Combobox](projects/002-accessible-combobox) | 🧩 Component |
