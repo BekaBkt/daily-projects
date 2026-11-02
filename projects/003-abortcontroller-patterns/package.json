@@ -1,0 +1,23 @@
+{
+  "name": "abortcontroller-patterns",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "ex:1": "tsx examples/01-cancel-fetch.ts",
+    "ex:2": "tsx examples/02-timeout-and-any.ts",
+    "ex:3": "tsx examples/03-event-listeners.ts",
+    "ex:4": "tsx examples/04-make-it-abortable.ts",
+    "examples": "npm run ex:1 && npm run ex:2 && npm run ex:3 && npm run ex:4"
+  },
+  "dependencies": {
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
