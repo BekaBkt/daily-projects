@@ -20,3 +20,4 @@ Each folder in [`projects/`](projects) is a self-contained project with its own 
 | 001 | 2026-10-31 | [Haunted Focus Timer](projects/001-haunted-focus-timer) | 📱 Mini-app |
 | 002 | 2026-11-01 | [Accessible Combobox](projects/002-accessible-combobox) | 🧩 Component |
 | 003 | 2026-11-02 | [AbortController Beyond Fetch](projects/003-abortcontroller-patterns) | 📝 TIL |
+| 004 | 2026-11-03 | [Myers Line Diff](projects/004-myers-diff) | 🧠 Algorithm |
