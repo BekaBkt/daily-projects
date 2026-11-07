@@ -24,3 +24,4 @@ Each folder in [`projects/`](projects) is a self-contained project with its own 
 | 005 | 2026-11-04 | [Contrast Fixer](projects/005-contrast-fixer) | 📱 Mini-app |
 | 006 | 2026-11-05 | [Dual Range Slider](projects/006-range-slider) | 🧩 Component |
 | 007 | 2026-11-06 | [Intl.Segmenter: Characters Users See](projects/007-intl-segmenter) | 📝 TIL |
+| 008 | 2026-11-07 | [Fenwick Tree for Virtual Lists](projects/008-fenwick-row-heights) | 🧠 Algorithm |
