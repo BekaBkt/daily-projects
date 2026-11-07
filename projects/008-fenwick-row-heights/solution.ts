@@ -15,6 +15,8 @@
 
 export type Estimate = number | ((index: number) => number);
 
+export type Align = "start" | "center" | "end" | "auto";
+
 export interface VisibleRange {
   /** First row to render (inclusive), overscan included. */
   start: number;
@@ -130,6 +132,56 @@ export class RowHeights {
     const start = Math.max(0, first - overscan);
     const end = Math.min(n, last + 1 + overscan);
     return { start, end, offsetTop: this.offsetOf(start) };
+  }
+
+  /**
+   * scrollTop that brings row `index` into view, clamped to the scrollable
+   * range. "auto" scrolls only as far as needed, like
+   * `scrollIntoView({ block: "nearest" })`, and keeps `currentScrollTop`
+   * when the row is already fully visible.
+   */
+  scrollTopFor(index: number, viewportHeight: number, align: Align = "auto", currentScrollTop = 0): number {
+    this.#assertIndex(index);
+    const rowTop = this.offsetOf(index);
+    const rowBottom = rowTop + this.#heights[index]!;
+    const maxScroll = Math.max(0, this.total - viewportHeight);
+
+    let target: number;
+    switch (align) {
+      case "start":
+        target = rowTop;
+        break;
+      case "end":
+        target = rowBottom - viewportHeight;
+        break;
+      case "center":
+        target = rowTop - (viewportHeight - (rowBottom - rowTop)) / 2;
+        break;
+      case "auto":
+        if (rowTop < currentScrollTop) target = rowTop;
+        else if (rowBottom > currentScrollTop + viewportHeight) target = rowBottom - viewportHeight;
+        else target = currentScrollTop;
+        break;
+    }
+    return Math.min(maxScroll, Math.max(0, target));
+  }
+
+  /**
+   * Change the row count, e.g. when an infinite list loads another page.
+   * Measured heights are kept, new rows get the estimate, and the tree is
+   * rebuilt in O(n).
+   */
+  resize(count: number): void {
+    assertCount(count);
+    const old = this.#heights;
+    if (count === old.length) return;
+    const next = new Float64Array(count);
+    next.set(count < old.length ? old.subarray(0, count) : old);
+    for (let i = old.length; i < count; i++) {
+      next[i] = assertHeight(this.#estimate(i));
+    }
+    this.#heights = next;
+    this.#tree = build(next);
   }
 
   #assertIndex(index: number): void {
