@@ -15,6 +15,15 @@
 
 export type Estimate = number | ((index: number) => number);
 
+export interface VisibleRange {
+  /** First row to render (inclusive), overscan included. */
+  start: number;
+  /** Row after the last one to render (exclusive), overscan included. */
+  end: number;
+  /** Pixel offset of `start`, for positioning the rendered slice. */
+  offsetTop: number;
+}
+
 export class RowHeights {
   /** 1-based Fenwick tree: tree[i] holds the sum of heights (i - lowbit(i), i]. */
   #tree: Float64Array;
@@ -101,6 +110,26 @@ export class RowHeights {
     }
     // `pos` rows end at or before `offset`, so the row containing it is `pos`.
     return Math.min(pos, n - 1);
+  }
+
+  /** Rows to render for a viewport, with `overscan` extra rows on each side. */
+  visibleRange(scrollTop: number, viewportHeight: number, overscan = 0): VisibleRange {
+    const n = this.count;
+    if (n === 0) return { start: 0, end: 0, offsetTop: 0 };
+    if (!Number.isInteger(overscan) || overscan < 0) {
+      throw new RangeError(`visibleRange: overscan must be a non-negative integer`);
+    }
+
+    const top = Math.max(0, scrollTop);
+    const bottom = top + Math.max(0, viewportHeight);
+    const first = this.indexAt(top);
+    let last = this.indexAt(bottom);
+    // A row that starts exactly at the bottom edge is not visible yet.
+    if (last > first && this.offsetOf(last) >= bottom) last--;
+
+    const start = Math.max(0, first - overscan);
+    const end = Math.min(n, last + 1 + overscan);
+    return { start, end, offsetTop: this.offsetOf(start) };
   }
 
   #assertIndex(index: number): void {
