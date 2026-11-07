@@ -76,6 +76,33 @@ export class RowHeights {
     return sum;
   }
 
+  /**
+   * Index of the row that contains pixel `offset`, clamped to the list.
+   * A row owns [offsetOf(i), offsetOf(i + 1)), so a boundary belongs to the
+   * row below it and zero-height rows are never returned for a boundary.
+   *
+   * Binary lifting over the tree: walk the powers of two from the top and
+   * take each jump whose block still fits in the remaining offset. That is
+   * O(log n), instead of O(log² n) for a binary search over `offsetOf`.
+   */
+  indexAt(offset: number): number {
+    const n = this.count;
+    if (n === 0) return 0;
+    if (!(offset > 0)) return 0; // also catches NaN
+    const tree = this.#tree;
+    let pos = 0;
+    let remaining = offset;
+    for (let step = highestPowerOfTwo(n); step > 0; step >>= 1) {
+      const next = pos + step;
+      if (next <= n && tree[next]! <= remaining) {
+        pos = next;
+        remaining -= tree[next]!;
+      }
+    }
+    // `pos` rows end at or before `offset`, so the row containing it is `pos`.
+    return Math.min(pos, n - 1);
+  }
+
   #assertIndex(index: number): void {
     if (!Number.isInteger(index) || index < 0 || index >= this.count) {
       throw new RangeError(`row ${index} is outside 0..${this.count - 1}`);
@@ -96,6 +123,12 @@ function build(heights: Float64Array): Float64Array {
     if (parent <= n) tree[parent]! += tree[i]!;
   }
   return tree;
+}
+
+function highestPowerOfTwo(n: number): number {
+  let p = 1;
+  while (p * 2 <= n) p *= 2;
+  return p;
 }
 
 function assertCount(count: number): void {
