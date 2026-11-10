@@ -6,7 +6,9 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "ex:1": "tsx examples/01-tiny-store.ts",
-    "examples": "npm run ex:1"
+    "ex:2": "tsx examples/02-cached-snapshots.ts",
+    "ex:3": "tsx examples/03-server-snapshot.tsx",
+    "examples": "npm run ex:1 && npm run ex:2 && npm run ex:3"
   },
   "dependencies": {
     "react": "^19.0.0",
