@@ -27,3 +27,4 @@ Each folder in [`projects/`](projects) is a self-contained project with its own 
 | 008 | 2026-11-07 | [Fenwick Tree for Virtual Lists](projects/008-fenwick-row-heights) | 🧠 Algorithm |
 | 009 | 2026-11-08 | [Cron Explainer](projects/009-cron-explainer) | 📱 Mini-app |
 | 010 | 2026-11-09 | [Accessible Sortable List](projects/010-sortable-list) | 🧩 Component |
+| 011 | 2026-11-10 | [useSyncExternalStore for Browser State](projects/011-use-sync-external-store) | 📝 TIL |
