@@ -28,3 +28,4 @@ Each folder in [`projects/`](projects) is a self-contained project with its own 
 | 009 | 2026-11-08 | [Cron Explainer](projects/009-cron-explainer) | 📱 Mini-app |
 | 010 | 2026-11-09 | [Accessible Sortable List](projects/010-sortable-list) | 🧩 Component |
 | 011 | 2026-11-10 | [useSyncExternalStore for Browser State](projects/011-use-sync-external-store) | 📝 TIL |
+| 012 | 2026-11-11 | [Fuzzy Finder Scoring](projects/012-fuzzy-match-scoring) | 🧠 Algorithm |
