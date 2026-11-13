@@ -75,3 +75,340 @@ kbd {
   margin: 0 auto;
   padding: 2rem 1rem 3rem;
 }
+
+h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.lede,
+.hint,
+.meta {
+  color: var(--muted);
+}
+
+.lede {
+  margin: 0.25rem 0 1.5rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 340px) 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .editor {
+    max-width: 320px;
+    justify-self: center;
+  }
+}
+
+.side {
+  display: grid;
+  gap: 1rem;
+}
+
+.panel,
+.preview,
+.editor {
+  margin: 0;
+  padding: 1rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+/* Editor */
+
+.editor-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.plot {
+  fill: var(--accent-soft);
+  opacity: 0.5;
+}
+
+.grid line {
+  stroke: var(--grid);
+  stroke-width: 1;
+}
+
+.axis-label {
+  fill: var(--muted);
+  font-size: 10px;
+}
+
+.linear {
+  stroke: var(--muted);
+  stroke-dasharray: 4 4;
+  stroke-width: 1;
+}
+
+.arm {
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+
+.curve {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.anchor {
+  fill: var(--ink);
+}
+
+.handle {
+  cursor: grab;
+  touch-action: none;
+  outline: none;
+}
+
+.handle:active {
+  cursor: grabbing;
+}
+
+.handle-hit {
+  fill: transparent;
+}
+
+.handle-dot {
+  stroke: var(--panel);
+  stroke-width: 2;
+}
+
+.handle-dot-1 {
+  fill: var(--accent);
+}
+
+.handle-dot-2 {
+  fill: var(--second);
+}
+
+/* SVG elements don't draw CSS outlines reliably, so the focus ring is the hit circle. */
+.handle:focus-visible .handle-hit {
+  stroke: var(--focus);
+  stroke-width: 3;
+}
+
+.hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+}
+
+/* Value panel */
+
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.value-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.625rem;
+  font-size: 1rem;
+  color: inherit;
+  background: var(--page);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.value-input[aria-invalid="true"] {
+  border-color: var(--error);
+}
+
+button {
+  font: inherit;
+  padding: 0.45rem 0.9rem;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--accent);
+}
+
+.link-button {
+  padding: 0;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+}
+
+.error {
+  margin: 0.5rem 0 0;
+  padding: 0.375rem 0.625rem;
+  font-size: 0.875rem;
+  color: var(--error);
+  background: var(--error-bg);
+  border-radius: 6px;
+}
+
+.meta {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+}
+
+.status {
+  min-height: 1.25rem;
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  color: var(--accent);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 999px;
+}
+
+.chip[aria-pressed="true"] {
+  color: var(--ink);
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent);
+}
+
+output {
+  min-width: 4.5rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Preview */
+
+.preview-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.preview-head h2 {
+  margin: 0;
+}
+
+.lanes,
+.frames {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.frames {
+  margin-top: 1rem;
+}
+
+.lane {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.lane-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.lane-track {
+  --ball: 22px;
+  position: relative;
+  height: calc(var(--ball) + 8px);
+  /* Side room so overshooting curves (back, anticipate) stay visible inside the track. */
+  padding: 4px 10%;
+  overflow: hidden;
+  background: var(--page);
+  border-radius: 999px;
+}
+
+/* The runner is as wide as the track minus one ball, so translateX(100%) lands the ball at the end. */
+.runner {
+  width: calc(100% - var(--ball));
+  transform: translateX(0);
+  transition: transform var(--duration) var(--easing);
+}
+
+.runner-linear {
+  transition-timing-function: linear;
+}
+
+.lanes[data-at-end="true"] .runner {
+  transform: translateX(100%);
+}
+
+.ball {
+  display: block;
+  width: var(--ball);
+  height: var(--ball);
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.runner-linear .ball {
+  background: var(--muted);
+}
+
+.frames-inner {
+  position: absolute;
+  inset: 4px 10%;
+  border-inline: 1px dashed var(--line);
+}
+
+.frame {
+  position: absolute;
+  top: 0;
+  left: calc((100% - var(--ball)) * var(--p));
+  width: var(--ball);
+  height: var(--ball);
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: calc(0.25 + var(--i) * 0.75);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .runner {
+    transition: none;
+  }
+}
+
+.preview .hint {
+  margin: 0 0 0.75rem;
+}
