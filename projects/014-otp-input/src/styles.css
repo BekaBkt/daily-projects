@@ -1,0 +1,267 @@
+:root {
+  --bg: #f4f5f9;
+  --surface: #ffffff;
+  --slot: #f8f9fc;
+  --text: #1a1d29;
+  --muted: #5d6276;
+  --border: #c9cdda;
+  --accent: #3f5bff;
+  --accent-soft: #dfe4ff;
+  --focus: #3f5bff;
+  --danger: #b4232c;
+  --danger-soft: #fde8e9;
+  --success: #1f6f4a;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #10121a;
+    --surface: #191c27;
+    --slot: #11131c;
+    --text: #eceef6;
+    --muted: #9ca1b6;
+    --border: #3a3f53;
+    --accent: #8796ff;
+    --accent-soft: #2d3458;
+    --focus: #b3bdff;
+    --danger: #ff9a9f;
+    --danger-soft: #3a1e24;
+    --success: #7fdcae;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--bg);
+}
+
+.page {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 48px 16px 64px;
+  display: grid;
+  gap: 20px;
+}
+
+h1 {
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.lead {
+  margin-top: 8px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.footnote {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ---------- OtpInput ---------- */
+
+.otp {
+  display: grid;
+  gap: 6px;
+}
+
+.otp__label {
+  font-weight: 600;
+}
+
+.otp__description {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.otp__slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.otp__cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.otp__slot {
+  width: 2.75rem;
+  height: 3.25rem;
+  padding: 0;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--slot);
+  color: var(--text);
+  font: 600 1.4rem/1 ui-monospace, "SF Mono", Menlo, monospace;
+  text-align: center;
+  caret-color: transparent;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.otp__slot::selection {
+  background: transparent;
+}
+
+.otp__slot[data-filled] {
+  border-color: var(--muted);
+  background: var(--surface);
+}
+
+.otp__slot:focus {
+  outline: none;
+}
+
+.otp__slot:focus-visible,
+.otp__slot:focus {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* An empty focused slot gets a blinking caret so it reads as "type here". */
+.otp__cell:has(.otp__slot:focus:not([data-filled])) {
+  position: relative;
+}
+
+.otp__cell:has(.otp__slot:focus:not([data-filled]))::after {
+  content: "";
+  position: absolute;
+  left: calc(1.375rem - 1px);
+  top: 30%;
+  width: 2px;
+  height: 40%;
+  background: var(--focus);
+  animation: otp-caret 1s steps(1) infinite;
+  pointer-events: none;
+}
+
+@keyframes otp-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.otp[data-invalid] .otp__slot {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.otp[data-invalid] .otp__slot:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 30%, transparent);
+}
+
+.otp[data-disabled] .otp__slot {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.otp__separator {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.otp__error {
+  min-height: 1.3em;
+  font-size: 0.9rem;
+  color: var(--danger);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .otp__slot {
+    transition: none;
+  }
+
+  .otp__cell:has(.otp__slot:focus:not([data-filled]))::after {
+    animation: none;
+  }
+}
+
+/* ---------- demo ---------- */
+
+.verify__footer,
+.recovery__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.recovery__actions {
+  justify-content: flex-start;
+}
+
+.verify__status {
+  font-weight: 600;
+  color: var(--success);
+}
+
+.button {
+  border: 1.5px solid var(--accent);
+  border-radius: 10px;
+  padding: 9px 16px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button--quiet {
+  background: transparent;
+  color: var(--accent);
+  border-color: transparent;
+}
+
+.button--quiet:hover:not(:disabled) {
+  background: var(--accent-soft);
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .button:not(.button--quiet) {
+    color: #10121a;
+  }
+}
