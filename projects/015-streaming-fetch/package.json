@@ -1,0 +1,20 @@
+{
+  "name": "streaming-fetch",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "ex:1": "tsx examples/01-chunks-lie.ts",
+    "ex:2": "tsx examples/02-lines.ts",
+    "ex:3": "tsx examples/03-ndjson.ts",
+    "ex:4": "tsx examples/04-sse-over-fetch.ts",
+    "ex:5": "tsx examples/05-progress.ts",
+    "ex:6": "tsx examples/06-cancel.ts",
+    "examples": "npm run ex:1 && npm run ex:2 && npm run ex:3 && npm run ex:4 && npm run ex:5 && npm run ex:6"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
