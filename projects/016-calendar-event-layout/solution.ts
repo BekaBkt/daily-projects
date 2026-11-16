@@ -29,7 +29,7 @@ export interface PlacedEvent<E extends TimedEvent> {
   cluster: number;
   /** Column the event sits in, 0-based. */
   column: number;
-  /** How many columns it is drawn across after expanding right. */
+  /** How many columns it is drawn across. */
   span: number;
   /** Total columns in its cluster; the event is `span / columns` wide. */
   columns: number;
@@ -87,4 +87,94 @@ export class MinHeap<T> {
   clear(): void {
     this.items.length = 0;
   }
+}
+
+interface Busy {
+  end: number;
+  column: number;
+}
+
+/**
+ * Lay out a day's events into columns.
+ *
+ * 1. Sort by start (longer first on ties, then input order).
+ * 2. Sweep: free every column whose event ended at or before this start,
+ *    then take the lowest free column, or open a new one. When nothing is
+ *    busy any more the current cluster is closed and columns reset.
+ *
+ * Returns one entry per input event, in input order.
+ */
+export function layoutEvents<E extends TimedEvent>(
+  events: readonly E[],
+  options: LayoutOptions = {},
+): PlacedEvent<E>[] {
+  const minDuration = options.minDuration ?? 0;
+  if (!(minDuration >= 0)) throw new RangeError("minDuration must be >= 0");
+
+  const placed: PlacedEvent<E>[] = events.map((event, i) => {
+    if (!Number.isFinite(event.start) || !Number.isFinite(event.end)) {
+      throw new RangeError(`event ${i} has a non-finite time`);
+    }
+    if (event.end < event.start) {
+      throw new RangeError(`event ${i} ends before it starts`);
+    }
+    const end = Math.max(event.end, event.start + minDuration);
+    if (end === event.start) {
+      // [s, s) overlaps nothing, so it has no honest place in a column.
+      throw new RangeError(`event ${i} has zero length; pass a minDuration`);
+    }
+    return {
+      event,
+      end,
+      cluster: 0,
+      column: 0,
+      span: 1,
+      columns: 1,
+    };
+  });
+
+  const order = placed
+    .map((_, i) => i)
+    .sort((a, b) => {
+      const pa = placed[a]!;
+      const pb = placed[b]!;
+      return pa.event.start - pb.event.start || pb.end - pa.end || a - b;
+    });
+
+  const busy = new MinHeap<Busy>((a, b) => a.end < b.end || (a.end === b.end && a.column < b.column));
+  const free = new MinHeap<number>((a, b) => a < b);
+
+  let cluster = -1;
+  let columnCount = 0;
+  let members: PlacedEvent<E>[] = [];
+
+  const closeCluster = () => {
+    for (const p of members) p.columns = columnCount;
+    members = [];
+  };
+
+  for (const index of order) {
+    const p = placed[index]!;
+    const start = p.event.start;
+
+    while (busy.size > 0 && busy.peek()!.end <= start) {
+      free.push(busy.pop()!.column);
+    }
+
+    if (busy.size === 0) {
+      closeCluster();
+      cluster += 1;
+      columnCount = 0;
+      free.clear();
+    }
+
+    const column = free.size > 0 ? free.pop()! : columnCount++;
+    p.cluster = cluster;
+    p.column = column;
+    busy.push({ end: p.end, column });
+    members.push(p);
+  }
+  closeCluster();
+
+  return placed;
 }
