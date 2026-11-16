@@ -218,3 +218,25 @@ function columnOverlaps<E extends TimedEvent>(
   const candidate = column[lo];
   return candidate !== undefined && candidate.event.start < end;
 }
+
+export interface Box {
+  top: number;
+  height: number;
+  /** Percent of the day column's width. */
+  left: number;
+  /** Percent of the day column's width. */
+  width: number;
+}
+
+/** Turn a placement into absolute-position numbers for a day column. */
+export function toBox<E extends TimedEvent>(
+  p: PlacedEvent<E>,
+  { dayStart = 0, pxPerMinute = 1 }: { dayStart?: number; pxPerMinute?: number } = {},
+): Box {
+  return {
+    top: (p.event.start - dayStart) * pxPerMinute,
+    height: (p.end - p.event.start) * pxPerMinute,
+    left: (p.column / p.columns) * 100,
+    width: (p.span / p.columns) * 100,
+  };
+}
