@@ -29,7 +29,7 @@ export interface PlacedEvent<E extends TimedEvent> {
   cluster: number;
   /** Column the event sits in, 0-based. */
   column: number;
-  /** How many columns it is drawn across. */
+  /** How many columns it is drawn across after expanding right. */
   span: number;
   /** Total columns in its cluster; the event is `span / columns` wide. */
   columns: number;
@@ -101,6 +101,8 @@ interface Busy {
  * 2. Sweep: free every column whose event ended at or before this start,
  *    then take the lowest free column, or open a new one. When nothing is
  *    busy any more the current cluster is closed and columns reset.
+ * 3. Let each event grow right across columns that are empty for its
+ *    whole duration.
  *
  * Returns one entry per input event, in input order.
  */
@@ -149,7 +151,8 @@ export function layoutEvents<E extends TimedEvent>(
   let members: PlacedEvent<E>[] = [];
 
   const closeCluster = () => {
-    for (const p of members) p.columns = columnCount;
+    if (members.length === 0) return;
+    expandCluster(members, columnCount);
     members = [];
   };
 
@@ -177,4 +180,41 @@ export function layoutEvents<E extends TimedEvent>(
   closeCluster();
 
   return placed;
+}
+
+/**
+ * Within one cluster, events in a column are disjoint and were added in
+ * start order, so both their starts and their ends are ascending. That lets
+ * "is column j free during [s, e)?" be a binary search instead of a scan.
+ */
+function expandCluster<E extends TimedEvent>(members: PlacedEvent<E>[], columns: number): void {
+  const byColumn: PlacedEvent<E>[][] = Array.from({ length: columns }, () => []);
+  for (const p of members) byColumn[p.column]!.push(p);
+
+  for (const p of members) {
+    p.columns = columns;
+    let span = 1;
+    for (let j = p.column + 1; j < columns; j++) {
+      if (columnOverlaps(byColumn[j]!, p.event.start, p.end)) break;
+      span += 1;
+    }
+    p.span = span;
+  }
+}
+
+function columnOverlaps<E extends TimedEvent>(
+  column: readonly PlacedEvent<E>[],
+  start: number,
+  end: number,
+): boolean {
+  // First event in the column whose end is after `start`.
+  let lo = 0;
+  let hi = column.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (column[mid]!.end <= start) lo = mid + 1;
+    else hi = mid;
+  }
+  const candidate = column[lo];
+  return candidate !== undefined && candidate.event.start < end;
 }
