@@ -33,3 +33,4 @@ Each folder in [`projects/`](projects) is a self-contained project with its own 
 | 014 | 2026-11-14 | [One-Time Code Input](projects/014-otp-input) | 🧩 Component |
 | 015 | 2026-11-15 | [Reading Streamed Responses](projects/015-streaming-fetch) | 📝 TIL |
 | 016 | 2026-11-16 | [Calendar Event Layout](projects/016-calendar-event-layout) | 🧠 Algorithm |
+| 017 | 2026-11-17 | [JSON to TypeScript](projects/017-json-to-typescript) | 📱 Mini-app |
