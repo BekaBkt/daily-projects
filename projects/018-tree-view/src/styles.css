@@ -112,3 +112,206 @@ kbd {
   color: var(--muted);
   padding: 0 8px 4px;
 }
+
+/* Tree */
+
+.tree {
+  font-size: 0.9rem;
+  max-height: 520px;
+  overflow: auto;
+  padding: 2px;
+}
+
+.tree-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--row);
+  padding-inline: calc((var(--level) - 1) * var(--indent) + 6px) 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  /* One vertical guide per ancestor level, drawn without extra DOM. */
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0 calc(var(--indent) / 2 + 4px),
+    var(--guide) calc(var(--indent) / 2 + 4px) calc(var(--indent) / 2 + 5px),
+    transparent calc(var(--indent) / 2 + 5px) var(--indent)
+  );
+  background-size: calc((var(--level) - 1) * var(--indent)) 100%;
+  background-repeat: no-repeat;
+}
+
+.tree-item:hover {
+  background-color: var(--hover);
+}
+
+.tree-item[aria-selected="true"] {
+  background-color: var(--selected);
+}
+
+.tree-item:focus {
+  outline: none;
+}
+
+.tree-item:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.tree-chevron {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  transition: transform 120ms ease-out;
+}
+
+.tree-chevron[data-visible="true"]::before {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  margin: 3px 0 0 2px;
+  border-right: 1.5px solid var(--muted);
+  border-bottom: 1.5px solid var(--muted);
+  transform: rotate(-45deg);
+}
+
+.tree-chevron[data-open="true"] {
+  transform: rotate(90deg);
+}
+
+.tree-icon {
+  flex: none;
+  width: 14px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.tree-icon[data-kind="folder"],
+.tree-icon[data-kind="folder-open"] {
+  background: var(--folder);
+  clip-path: polygon(0 0, 40% 0, 50% 18%, 100% 18%, 100% 100%, 0 100%);
+}
+
+.tree-icon[data-kind="folder-open"] {
+  opacity: 0.75;
+}
+
+.tree-icon[data-kind="file"] {
+  width: 11px;
+  height: 14px;
+  margin-inline: 1px 2px;
+  border: 1.5px solid var(--muted);
+  border-radius: 2px;
+}
+
+.tree-icon[data-ext="tsx"],
+.tree-icon[data-ext="ts"] {
+  border-color: #3178c6;
+}
+
+.tree-icon[data-ext="css"] {
+  border-color: #b04cc4;
+}
+
+.tree-icon[data-ext="json"] {
+  border-color: #c58a12;
+}
+
+.tree-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-hint {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.tree-hint--error {
+  color: var(--danger);
+  font-style: normal;
+}
+
+.tree-spinner {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--guide);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Selection + shortcuts */
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0 8px 4px;
+  list-style: none;
+  font: 0.85rem ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+.breadcrumb li + li::before {
+  content: "/";
+  margin-right: 4px;
+  color: var(--muted);
+}
+
+.breadcrumb [aria-current] {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.shortcuts {
+  display: grid;
+  gap: 8px;
+  padding: 0 8px 4px;
+  font-size: 0.85rem;
+}
+
+.shortcuts div {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.shortcuts dd {
+  color: var(--muted);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tree-chevron {
+    transition: none;
+  }
+
+  /* Keep a loading cue without the spinning. */
+  .tree-spinner {
+    animation: none;
+    border-top-color: var(--guide);
+    background: var(--accent);
+    transform: scale(0.5);
+  }
+}
