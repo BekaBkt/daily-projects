@@ -35,3 +35,4 @@ Each folder in [`projects/`](projects) is a self-contained project with its own 
 | 016 | 2026-11-16 | [Calendar Event Layout](projects/016-calendar-event-layout) | 🧠 Algorithm |
 | 017 | 2026-11-17 | [JSON to TypeScript](projects/017-json-to-typescript) | 📱 Mini-app |
 | 018 | 2026-11-18 | [Tree View](projects/018-tree-view) | 🧩 Component |
+| 019 | 2026-11-20 | [Intl Formatters for UI Copy](projects/019-intl-formatters) | 📝 TIL |
