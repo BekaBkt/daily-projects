@@ -36,3 +36,4 @@ Each folder in [`projects/`](projects) is a self-contained project with its own 
 | 017 | 2026-11-17 | [JSON to TypeScript](projects/017-json-to-typescript) | 📱 Mini-app |
 | 018 | 2026-11-18 | [Tree View](projects/018-tree-view) | 🧩 Component |
 | 019 | 2026-11-20 | [Intl Formatters for UI Copy](projects/019-intl-formatters) | 📝 TIL |
+| 020 | 2026-11-21 | [Balanced Line Breaking](projects/020-balanced-line-breaking) | 🧠 Algorithm |
