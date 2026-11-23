@@ -1,0 +1,354 @@
+:root {
+  --bg: #f3f4f8;
+  --surface: #ffffff;
+  --surface-2: #f7f8fb;
+  --text: #1b1e2a;
+  --muted: #5c6175;
+  --border: #d3d6e2;
+  --accent: #3554e8;
+  --accent-soft: #dfe5ff;
+  --focus: #3554e8;
+  --code-bg: #fbfbfd;
+  --term-bg: #14161f;
+  --term-text: #cfd5ea;
+  --gutter: 7px;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1118;
+    --surface: #181b25;
+    --surface-2: #1d2130;
+    --text: #e9ebf4;
+    --muted: #9da2b7;
+    --border: #343a4f;
+    --accent: #8b9bff;
+    --accent-soft: #2b3460;
+    --focus: #b0bbff;
+    --code-bg: #151823;
+    --term-bg: #0a0b10;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--bg);
+}
+
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 48px 16px 64px;
+}
+
+.intro h1 {
+  font-size: 1.75rem;
+  letter-spacing: -0.01em;
+}
+
+.intro p {
+  margin-top: 8px;
+  max-width: 68ch;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+kbd {
+  font: 0.85em ui-monospace, "SF Mono", Menlo, monospace;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--surface);
+  white-space: nowrap;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 28px 0 12px;
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.switch input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+.readout {
+  font: 0.85rem ui-monospace, "SF Mono", Menlo, monospace;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ---------- split pane ---------- */
+
+.split {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  transition: grid-template-columns 140ms ease-out, grid-template-rows 140ms ease-out;
+}
+
+.split--row {
+  grid-template-columns:
+    calc((100% - var(--gutter)) * var(--split-size) / 100)
+    var(--gutter)
+    minmax(0, 1fr);
+}
+
+.split--column {
+  grid-template-rows:
+    calc((100% - var(--gutter)) * var(--split-size) / 100)
+    var(--gutter)
+    minmax(0, 1fr);
+}
+
+.split.is-dragging {
+  transition: none;
+  user-select: none;
+}
+
+.split-pane {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+.split.is-collapsed > .split-pane--primary {
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.split-separator {
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  touch-action: none;
+  z-index: 1;
+}
+
+.split--row > .split-separator {
+  cursor: col-resize;
+  border-inline: 1px solid var(--border);
+}
+
+.split--column > .split-separator {
+  cursor: row-resize;
+  border-block: 1px solid var(--border);
+}
+
+/* A wider invisible hit area than the visible gutter. */
+.split-separator::before {
+  content: "";
+  position: absolute;
+  inset: 0 -5px;
+}
+
+.split--column > .split-separator::before {
+  inset: -5px 0;
+}
+
+.split-grip {
+  border-radius: 2px;
+  background: var(--border);
+  transition: background-color 120ms;
+}
+
+.split--row .split-grip {
+  width: 3px;
+  height: 28px;
+}
+
+.split--column .split-grip {
+  width: 28px;
+  height: 3px;
+}
+
+.split-separator:hover .split-grip,
+.split.is-dragging > .split-separator .split-grip {
+  background: var(--accent);
+}
+
+.split-separator:focus-visible {
+  outline: none;
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 2px var(--focus);
+}
+
+.split-separator:focus-visible .split-grip {
+  background: var(--focus);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .split,
+  .split-grip {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .split-separator {
+    border-color: CanvasText;
+  }
+
+  .split-separator:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+
+  .split-grip {
+    background: CanvasText;
+  }
+}
+
+/* ---------- demo ---------- */
+
+.ide {
+  height: min(560px, 70dvh);
+  min-height: 360px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.pane-title {
+  position: sticky;
+  top: 0;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: inherit;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar {
+  height: 100%;
+  background: var(--surface-2);
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 6px;
+}
+
+.file {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: inherit;
+  font: 0.9rem ui-monospace, "SF Mono", Menlo, monospace;
+  text-align: start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.file:hover {
+  background: var(--surface);
+}
+
+.file[aria-current="page"] {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+.file:focus-visible {
+  outline-offset: -2px;
+}
+
+.editor,
+.terminal {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor {
+  background: var(--code-bg);
+}
+
+.terminal {
+  background: var(--term-bg);
+  color: var(--term-text);
+}
+
+.terminal .pane-title {
+  color: #8a91aa;
+  border-color: #2a2e3d;
+}
+
+.editor pre,
+.terminal pre {
+  flex: 1;
+  padding: 12px 16px;
+  overflow: auto;
+  font: 0.85rem/1.6 ui-monospace, "SF Mono", Menlo, monospace;
+  text-align: left;
+}
+
+.editor pre:focus-visible,
+.terminal pre:focus-visible {
+  outline-offset: -2px;
+}
+
+.help {
+  margin-top: 28px;
+}
+
+.help h2 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.help dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 8px 24px;
+}
+
+.help dl > div {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.help dd {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
