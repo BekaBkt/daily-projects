@@ -38,3 +38,4 @@ Each folder in [`projects/`](projects) is a self-contained project with its own 
 | 019 | 2026-11-20 | [Intl Formatters for UI Copy](projects/019-intl-formatters) | 📝 TIL |
 | 020 | 2026-11-21 | [Balanced Line Breaking](projects/020-balanced-line-breaking) | 🧠 Algorithm |
 | 021 | 2026-11-22 | [Fluid Type Scale](projects/021-fluid-type-scale) | 📱 Mini-app |
+| 022 | 2026-11-23 | [Resizable Split Pane](projects/022-split-pane) | 🧩 Component |
