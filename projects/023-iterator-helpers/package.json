@@ -1,0 +1,28 @@
+{
+  "name": "iterator-helpers",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "ex:1": "tsx examples/01-lazy-vs-eager.ts",
+    "ex:2": "tsx examples/02-paging-and-chunks.ts",
+    "ex:3": "tsx examples/03-gotchas.ts",
+    "ex:4": "tsx examples/04-selection-sets.ts",
+    "ex:5": "tsx examples/05-show-more.tsx",
+    "examples": "npm run ex:1 && npm run ex:2 && npm run ex:3 && npm run ex:4 && npm run ex:5"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
