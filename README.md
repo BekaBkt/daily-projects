@@ -40,3 +40,4 @@ Each folder in [`projects/`](projects) is a self-contained project with its own 
 | 021 | 2026-11-22 | [Fluid Type Scale](projects/021-fluid-type-scale) | 📱 Mini-app |
 | 022 | 2026-11-23 | [Resizable Split Pane](projects/022-split-pane) | 🧩 Component |
 | 023 | 2026-11-26 | [Iterator Helpers and Set Methods](projects/023-iterator-helpers) | 📝 TIL |
+| 024 | 2026-11-27 | [Multi-Term Highlighter](projects/024-aho-corasick-highlighter) | 🧠 Algorithm |
